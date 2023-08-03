@@ -1,9 +1,10 @@
 package user
 
 type RegisterUserInput struct {
-	Name         string
-	Nim          string
-	Email        string
-	Division     string
-	AlasanDaftar string
+	Name         string `json:"name" binding:"required"`
+	Nim          string `json:"nim" binding:"required"`
+	Email        string `json:"email" binding:"required,email"`
+	Division     string `json:"division" binding:"required"`
+	NoHP         string `json:"no_hp" binding:"required"`
+	AlasanDaftar string `json:"alasan_daftar" binding:"required"`
 }

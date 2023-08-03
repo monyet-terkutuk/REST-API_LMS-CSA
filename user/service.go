@@ -21,6 +21,7 @@ func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
 	user.Nim = input.Nim
 	user.Email = input.Email
 	user.Division = input.Division
+	user.NoHP = input.NoHP
 	user.AlasanDaftar = input.AlasanDaftar
 	passworHash, err := bcrypt.GenerateFromPassword([]byte(input.Nim), bcrypt.DefaultCost)
 	user.Password = string(passworHash)

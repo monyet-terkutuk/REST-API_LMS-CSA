@@ -2,8 +2,10 @@ package main
 
 import (
 	"log"
+	"restAPI_lms/handler"
 	"restAPI_lms/user"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -20,13 +22,12 @@ func main() {
 
 	userService := user.NewService(userRepository)
 
-	user := user.RegisterUserInput{
-		Name:         "admin",
-		Nim:          "21110395",
-		Email:        "admin@gmail.com",
-		Division:     "Pemograman",
-		AlasanDaftar: "Mau Kaya",
-	}
+	userHandler := handler.NewUserHandler(userService)
 
-	userService.RegisterUser(user)
+	router := gin.Default()
+	api := router.Group("/api/v1")
+
+	api.POST("/users", userHandler.RegisterUser)
+
+	router.Run()
 }
