@@ -17,3 +17,14 @@ type LoginUserInput struct {
 type CheckEmailInput struct {
 	Email string `json:"email" binding:"required,email"`
 }
+
+type UpdateUserInput struct {
+	Name     string `json:"name" binding:"required"`
+	Nim      string `json:"nim" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	// AvatarFileName string `json:"avatar_file"`
+	Division string `json:"division" binding:"required"`
+	NoHP     string `json:"no_hp" binding:"required"`
+	RoleID   bool   `json:"role_id"`
+}
