@@ -1,8 +1,8 @@
 package helper
 
-func IfErrReturnBasic(err error) error {
+func IfErrReturnBasic(err error) (any, error) {
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return nil, nil
 }

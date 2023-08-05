@@ -8,3 +8,8 @@ type RegisterUserInput struct {
 	NoHP         string `json:"no_hp" binding:"required"`
 	AlasanDaftar string `json:"alasan_daftar" binding:"required"`
 }
+
+type LoginUserInput struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
