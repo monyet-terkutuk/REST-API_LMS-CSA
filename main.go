@@ -28,15 +28,12 @@ func main() {
 	userRepository := user.NewRepository(db)
 	courseRepository := courses.NewRepository(db)
 
-	courses, _ := courseRepository.GetByUserID(3)
-	fmt.Println(len(courses))
-	for _, course := range courses {
-		fmt.Println(course.Title)
-		fmt.Println(course.CourseImages[0].FileName)
-	}
-
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
+	courseService := courses.NewService(courseRepository)
+
+	courses, _ := courseService.FindCourses(18, "")
+	fmt.Println(len(courses))
 
 	userHandler := handler.NewUserHandler(userService, authService)
 
