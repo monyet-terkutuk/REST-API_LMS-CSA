@@ -1,1 +1,1 @@
-package courses
+package course

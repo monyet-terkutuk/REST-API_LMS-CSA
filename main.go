@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"restAPI_lms/auth"
@@ -32,10 +31,8 @@ func main() {
 	authService := auth.NewService()
 	courseService := courses.NewService(courseRepository)
 
-	courses, _ := courseService.FindCourses(18, "")
-	fmt.Println(len(courses))
-
 	userHandler := handler.NewUserHandler(userService, authService)
+	courseHandler := handler.NewCourseHandler(courseService)
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
@@ -45,6 +42,8 @@ func main() {
 	api.POST("/email-check", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddlerware(authService, userService), userHandler.UploadAvatar)
 	api.POST("/users-update", authMiddlerware(authService, userService), userHandler.UpdateUser)
+
+	api.GET("/courses", courseHandler.GetCourses)
 
 	router.Run()
 }

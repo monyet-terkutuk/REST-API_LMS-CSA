@@ -1,7 +1,7 @@
-package courses
+package course
 
 type Service interface {
-	FindCourses(userID int) ([]Course, error)
+	GetCourses(userID int, division string) ([]Course, error)
 }
 
 type service struct {
@@ -12,7 +12,7 @@ func NewService(repository Repository) *service {
 	return &service{repository}
 }
 
-func (s *service) FindCourses(userID int, division string) ([]Course, error) {
+func (s *service) GetCourses(userID int, division string) ([]Course, error) {
 	if userID != 0 {
 		courses, err := s.repository.GetByUserID(userID)
 		if err != nil {

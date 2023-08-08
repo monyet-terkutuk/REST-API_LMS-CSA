@@ -155,7 +155,15 @@ func (h *userHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	token := "blabla"
+	token, err := h.authService.GenerateToken(updatedUser.ID)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Failed to register", http.StatusBadRequest, "error", errorMessage)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	formatter := user.FormatUser(updatedUser, token)
 
 	response := helper.APIResponse("Update user success", http.StatusOK, "success", formatter)

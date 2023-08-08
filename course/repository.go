@@ -1,4 +1,4 @@
-package courses
+package course
 
 import "gorm.io/gorm"
 
@@ -18,7 +18,7 @@ func NewRepository(db *gorm.DB) *repository {
 
 func (r *repository) GetAll() ([]Course, error) {
 	var courses []Course
-	err := r.db.Find(&courses).Error
+	err := r.db.Preload("CourseImages", "course_images.is_primary = 1").Find(&courses).Error
 	if err != nil {
 		return courses, err
 	}
