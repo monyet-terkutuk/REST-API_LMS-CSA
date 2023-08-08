@@ -28,6 +28,7 @@ func (h *courseHandler) GetCourses(c *gin.Context) {
 		return
 	}
 
-	response := helper.APIResponse("List of courses", http.StatusOK, "success", courses)
+	formatter := course.FormatCourses(courses)
+	response := helper.APIResponse("List of courses", http.StatusOK, "success", formatter)
 	c.JSON(http.StatusOK, response)
 }
