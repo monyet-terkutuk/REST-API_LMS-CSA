@@ -7,6 +7,7 @@ type Repository interface {
 	FindByEmail(email string) (User, error)
 	FindByID(ID int) (User, error)
 	Update(user User) (User, error)
+	// GetAll() ([]User, error)
 }
 
 type repository struct {

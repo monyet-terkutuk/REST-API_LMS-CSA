@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"restAPI_lms/auth"
+	courses "restAPI_lms/course"
 	"restAPI_lms/handler"
 	"restAPI_lms/helper"
 	"restAPI_lms/user"
@@ -24,6 +26,14 @@ func main() {
 	}
 
 	userRepository := user.NewRepository(db)
+	courseRepository := courses.NewRepository(db)
+
+	courses, _ := courseRepository.GetByUserID(3)
+	fmt.Println(len(courses))
+	for _, course := range courses {
+		fmt.Println(course.Title)
+		fmt.Println(course.CourseImages[0].FileName)
+	}
 
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
