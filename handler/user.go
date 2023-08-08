@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"restAPI_lms/auth"
 	"restAPI_lms/helper"
 	"restAPI_lms/user"
 
@@ -11,10 +12,11 @@ import (
 
 type userHandler struct {
 	userService user.Service
+	authService auth.Service
 }
 
-func NewUserHandler(userService user.Service) *userHandler {
-	return &userHandler{userService}
+func NewUserHandler(userService user.Service, authService auth.Service) *userHandler {
+	return &userHandler{userService, authService}
 }
 
 func (h *userHandler) RegisterUser(c *gin.Context) {
@@ -39,7 +41,15 @@ func (h *userHandler) RegisterUser(c *gin.Context) {
 		return
 	}
 
-	token := "blabla"
+	token, err := h.authService.GenerateToken(registeredUser.ID)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Failed to register", http.StatusBadRequest, "error", errorMessage)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	formatter := user.FormatUser(registeredUser, token)
 
 	response := helper.APIResponse("Register successfully", http.StatusOK, "success", formatter)
@@ -68,7 +78,15 @@ func (h *userHandler) LoginUser(c *gin.Context) {
 		return
 	}
 
-	token := "blabla"
+	token, err := h.authService.GenerateToken(loggedinUser.ID)
+	if err != nil {
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Failed to login", http.StatusBadRequest, "error", errorMessage)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	formatter := user.FormatUser(loggedinUser, token)
 
 	response := helper.APIResponse("Login Success", http.StatusOK, "success", formatter)
@@ -125,7 +143,8 @@ func (h *userHandler) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	userID := 1
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
 
 	updatedUser, err := h.userService.UpdateUser(userID, input)
 	if err != nil {
@@ -154,7 +173,8 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 		return
 	}
 
-	userID := 1
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
 
 	path := fmt.Sprintf("images/avatar/%d-%s", userID, file.Filename)
 	err = c.SaveUploadedFile(file, path)
